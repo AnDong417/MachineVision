@@ -9,13 +9,14 @@
 //定义节点
 typedef struct
 {
-    int x;
-    int y;
-    int g;  //实际代价
-    int h;  //估计代价
-    int f;  //总代价
+    int x;  //当前点坐标 x
+    int y;  //当前点坐标 y
+    int g;  //从起点到当前点的实际代价（路径长度）
+    int h;  //从当前点到终点的估计代价（路径长度）
+    int f;  //总代价 = g + h
 } Node;
 
+//0：可以通过；1：障碍
 int map[ROW][COL] = {
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -31,7 +32,7 @@ int map[ROW][COL] = {
 
 Node *create_node(int x, int y);    //定义节点操作函数
 void node_cost(Node *node, int g, int h);   //节点代价函数
-int heuristic(int x, int y, int target_x, int target_y);    //起点到目标点直线距离的近似
+int heuristic(int x, int y, int target_x, int target_y);    //当前点到目标点直线距离的近似
 void astar(Node *start, Node *target);
 
 int main()
@@ -72,8 +73,8 @@ int heuristic(int x, int y, int target_x, int target_y)
 void astar(Node *start, Node *target)
 {
     //初始化开放列表和关闭列表
-    Node *open_list[ROW * COL] = {NULL};
-    Node *close_list[ROW * COL] = {NULL};
+    Node *open_list[ROW * COL] = {NULL};    //待扩展的节点
+    Node *close_list[ROW * COL] = {NULL};   //已经扩展过的节点
     int open_count = 0;
     int close_count = 0;
 
